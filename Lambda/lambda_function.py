@@ -213,6 +213,16 @@ def recommend_portfolio(intent_request):
         # Once all slots are valid, a delegate dialog is returned to Lex to choose the next course of action
         return delegate(output_session_attributes, get_slots(intent_request))
 
+      # Return a message with the bot's recommendation
+    return close(
+        intent_request["sessionAttributes"],
+        "Fulfilled",
+        {
+            "contentType": "PlainText",
+            "content": """Thank you!
+            """
+        },
+    )
 
 
 ### Intents Dispatcher ###
