@@ -80,6 +80,27 @@ def get_risk(risk_level, intent_request):
                 "For a no-risk portfolio, invest in "
                 "100% bonds (AGG), 0% equities (SPY)",
             )
+        if risk_level.lower == "low":
+            return build_validation_result(
+                True,
+                "riskLevel",
+                "For a low-risk portfolio, invest in "
+                "60% bonds (AGG), 40% equities (SPY)",
+            )
+        if risk_level.lower == "medium":
+            return build_validation_result(
+                True,
+                "riskLevel",
+                "For a medium-risk portfolio, invest in "
+                "40% bonds (AGG), 60% equities (SPY)",
+            )
+        if risk_level.lower == "high":
+            return build_validation_result(
+                True,
+                "riskLevel",
+                "For a high-risk portfolio, invest in "
+                "20% bonds (AGG), 80% equities (SPY)",
+            )
 
 ### Dialog Actions Helper Functions ###
 def get_slots(intent_request):
@@ -213,16 +234,19 @@ def recommend_portfolio(intent_request):
         # Once all slots are valid, a delegate dialog is returned to Lex to choose the next course of action
         return delegate(output_session_attributes, get_slots(intent_request))
 
-      # Return a message with the bot's recommendation
-    return close(
-        intent_request["sessionAttributes"],
-        "Fulfilled",
-        {
-            "contentType": "PlainText",
-            "content": """Thank you!
-            """
-        },
-    )
+    if desired_risk["isValid"]:
+
+
+        # Return a message with the bot's recommendation
+        return close(
+            intent_request["sessionAttributes"],
+            "Fulfilled",
+            {
+                "contentType": "PlainText",
+                "content": """Thank you!
+                """
+            },
+        )
 
 
 ### Intents Dispatcher ###
