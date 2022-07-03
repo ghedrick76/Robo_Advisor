@@ -206,7 +206,7 @@ def recommend_portfolio(intent_request):
         # Once all slots are valid, a delegate dialog is returned to Lex to choose the next course of action
         return delegate(output_session_attributes, get_slots(intent_request))
 
-    desired_risk = get_risk(risk_level)
+    desired_risk = get_risk(risk_level.lower())
 
 
     # Return a message with the bot's recommendation
