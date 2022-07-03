@@ -66,41 +66,17 @@ def validate_data(age, investment_amount, intent_request):
     # A True results is returned if age or amount are valid
     return build_validation_result(True, None, None)
 
-def get_risk(risk_level, intent_request):
+def get_risk(risk_level):
     """
     Retrieves the risk level given by the user
     """
-
-    # Determine user's desired risk
-    if risk_level is not None:
-        if risk_level.lower == "none":
-            return build_validation_result(
-                True,
-                "riskLevel",
-                "For a no-risk portfolio, invest in "
-                "100% bonds (AGG), 0% equities (SPY)",
-            )
-        if risk_level.lower == "low":
-            return build_validation_result(
-                True,
-                "riskLevel",
-                "For a low-risk portfolio, invest in "
-                "60% bonds (AGG), 40% equities (SPY)",
-            )
-        if risk_level.lower == "medium":
-            return build_validation_result(
-                True,
-                "riskLevel",
-                "For a medium-risk portfolio, invest in "
-                "40% bonds (AGG), 60% equities (SPY)",
-            )
-        if risk_level.lower == "high":
-            return build_validation_result(
-                True,
-                "riskLevel",
-                "For a high-risk portfolio, invest in "
-                "20% bonds (AGG), 80% equities (SPY)",
-            )
+    risk_levels = {
+        "none" : "For a no-risk portfolio, invest in 100% bonds (AGG), 0% equities (SPY)",
+        "low" : "For a low-risk portfolio, invest in 60% bonds (AGG), 40% equities (SPY)",
+        "medium" : "For a medium-risk portfolio, invest in 40% bonds (AGG), 60% equities (SPY)",
+        "high" : "For a high-risk portfolio, invest in 20% bonds (AGG), 80% equities (SPY)",
+    }
+    return risk_levels[risk_level]
 
 ### Dialog Actions Helper Functions ###
 def get_slots(intent_request):
@@ -223,10 +199,6 @@ def recommend_portfolio(intent_request):
                 validation_result["violatedSlot"],
                 validation_result["message"],
             )
-        
-        # 
-        desired_risk = get_risk(risk_level, intent_request)
-
 
         # Fetch current session attributes
         output_session_attributes = intent_request["sessionAttributes"]
@@ -234,19 +206,18 @@ def recommend_portfolio(intent_request):
         # Once all slots are valid, a delegate dialog is returned to Lex to choose the next course of action
         return delegate(output_session_attributes, get_slots(intent_request))
 
-    if desired_risk["isValid"]:
+    desired_risk = get_risk(risk_level)
 
 
-        # Return a message with the bot's recommendation
-        return close(
-            intent_request["sessionAttributes"],
-            "Fulfilled",
-            {
-                "contentType": "PlainText",
-                "content": """Thank you!
-                """
-            },
-        )
+    # Return a message with the bot's recommendation
+    return close(
+        intent_request["sessionAttributes"],
+        "Fulfilled",
+        {
+            "contentType": "PlainText",
+            "content": f"{desired_risk}"
+        },
+    )
 
 
 ### Intents Dispatcher ###
