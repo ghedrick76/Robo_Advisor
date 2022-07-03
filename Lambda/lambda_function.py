@@ -71,10 +71,10 @@ def get_risk(risk_level):
     Retrieves the risk level given by the user
     """
     risk_levels = {
-        "none" : "For a no-risk portfolio, invest in 100% bonds (AGG), 0% equities (SPY)",
-        "low" : "For a low-risk portfolio, invest in 60% bonds (AGG), 40% equities (SPY)",
-        "medium" : "For a medium-risk portfolio, invest in 40% bonds (AGG), 60% equities (SPY)",
-        "high" : "For a high-risk portfolio, invest in 20% bonds (AGG), 80% equities (SPY)",
+        "none" : "100% bonds (AGG), 0% equities (SPY)",
+        "low" : "60% bonds (AGG), 40% equities (SPY)",
+        "medium" : "40% bonds (AGG), 60% equities (SPY)",
+        "high" : "20% bonds (AGG), 80% equities (SPY)",
     }
     return risk_levels[risk_level]
 
@@ -215,7 +215,7 @@ def recommend_portfolio(intent_request):
         "Fulfilled",
         {
             "contentType": "PlainText",
-            "content": f"{desired_risk}"
+            "content": f"For a {risk_level}-risk portfolio, invest in {desired_risk}"
         },
     )
 
